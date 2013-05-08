@@ -11,14 +11,16 @@ import java.util.Stack;
 
 public class Print implements Command {
     @CalcResource(type = ResType.STACK)
-    Stack<Double> stack;
+    private Stack<Double> stack;
 
-    public void execute(String[] args) throws InvalidCommandException{
-        try{
+    public void execute(String[] args) throws InvalidCommandException {
+        try {
             System.out.println(stack.peek());
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
 
-    };
+    }
+
+    ;
 }

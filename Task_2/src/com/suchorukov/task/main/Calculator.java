@@ -8,8 +8,12 @@ import java.lang.reflect.Proxy;
 import java.util.*;
 
 public class Calculator {
+    @CalcResource(type = ResType.STACK)
     Stack<Double> stack = new Stack<Double>();
+
+    @CalcResource(type = ResType.DEFINES)
     Map<String, Double> varMap = new HashMap<String, Double>();
+
     Map<String, Command> commands = new HashMap<String, Command>();
 
     public Calculator() throws FileNotFoundException, InvalidCommandException {
@@ -48,7 +52,7 @@ public class Calculator {
             String[] inputStr = inputCommand.split("\\s");
             if (inputStr.length > 0 && !"".equals(inputStr[0])) {
                 if (inputCommand.equalsIgnoreCase("stop")) break;
-                if (inputCommand.startsWith("#"))continue;
+                if (inputCommand.startsWith("#")) continue;
                 try {
                     commands.get(inputStr[0]).execute(inputStr);
                 } catch (InvalidCommandException e) {
@@ -81,22 +85,19 @@ public class Calculator {
             try {
                 command = Class.forName((String) p.get(key));
                 Command commandInst = (Command) command.newInstance();
-                //commandInst.execute(new String[]{"", ""});
                 for (Field field : command.getDeclaredFields()) {
                     CalcResource calcRes = field.getAnnotation(CalcResource.class);
                     if (calcRes != null) {
+                        field.setAccessible(true);
                         if (ResType.STACK.equals(calcRes.type())) {
-                            field.setAccessible(true);
                             field.set(commandInst, stack);
-                            field.setAccessible(false);
                         } else if (ResType.DEFINES.equals(calcRes.type())) {
-                            field.setAccessible(true);
                             field.set(commandInst, varMap);
-                            field.setAccessible(false);
                         }
+                        field.setAccessible(false);
                     }
                 }
-                Command commandProxy = (Command) Proxy.newProxyInstance(Command.class.getClassLoader(),new Class<?>[] {Command.class},new CalcInvoker(commandInst));
+                Command commandProxy = (Command) Proxy.newProxyInstance(Command.class.getClassLoader(), new Class<?>[]{Command.class}, new CalcInvoker(commandInst, stack, varMap));
                 commands.put(key.toString(), commandProxy);
             } catch (ClassNotFoundException e) {
                 System.out.println("Не найдена команда" + p.get(key));
@@ -104,9 +105,7 @@ public class Calculator {
                 System.out.println("Нед доступа к одному из полей команды" + p.get(key));
             } catch (InstantiationException e) {
                 System.out.println("Невозможно создать команду" + p.get(key));
-            } /* (InvalidCommandException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }   */
+            }
         }
     }
 }

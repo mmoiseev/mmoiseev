@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class Sub implements Command {
     @CalcResource(type = ResType.STACK)
-    Stack<Double> stack;
+    private Stack<Double> stack;
 
     public void execute(String[] args) throws InvalidCommandException {
         try {
@@ -22,5 +22,7 @@ public class Sub implements Command {
         }
 
 
-    };
+    }
+
+    ;
 }

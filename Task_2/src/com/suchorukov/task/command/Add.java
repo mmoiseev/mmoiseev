@@ -19,5 +19,7 @@ public class Add implements Command {
         } catch (Exception e) {
             throw new InvalidCommandException();
         }
-    };
+    }
+
+    ;
 }

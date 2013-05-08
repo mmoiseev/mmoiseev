@@ -10,15 +10,17 @@ import java.util.Stack;
 
 public class Define implements Command {
     @CalcResource(type = ResType.DEFINES)
-    Map<String,Double> varMap;
+    private Map<String, Double> varMap;
 
-    public void execute(String[] args) throws InvalidCommandException{
-        try{
+    public void execute(String[] args) throws InvalidCommandException {
+        try {
             varMap.put(args[1], Double.valueOf(args[2]));
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new InvalidCommandException();
         }
 
 
-    };
+    }
+
+    ;
 }
