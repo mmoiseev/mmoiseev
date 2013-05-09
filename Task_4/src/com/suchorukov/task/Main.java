@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        // todo: убрать захардкоженный текстовый файл, пусть файл задается из коммандной строки, а если она пустая, то чтение должно быть из консоли
         Reader r = new InputStreamReader(new BufferedInputStream(new FileInputStream("c:\\file.txt")), "UTF-8");
         StringBuilder strBuild = new StringBuilder();
         final Map<String, Integer> wordFrequency = new HashMap<String, Integer>();
@@ -15,6 +16,9 @@ public class Main {
             char c = (char) cur;
             if (Character.isLetterOrDigit(c)) {
                 strBuild.append(c);
+
+                // todo 1) Пустоту буффера проверить через strBuild.length()
+                // todo 2) Если файл кончается на букву, будет ли последнее слово учтено в статистике?
             } else if (!"".equals(strBuild.toString())) {
                 Integer freq = wordFrequency.get(strBuild.toString());
                 wordFrequency.put(strBuild.toString(), (freq != null ? freq : 0) + 1);
@@ -40,5 +44,7 @@ public class Main {
             System.out.println(words.get(i).getKey() + "," + p + "%");
 
         }
+
+        // todo файл не закрыт!!
     }
 }

@@ -60,13 +60,14 @@ public class Calculator {
                 } catch (Exception e) {
                     System.out.println("Не верный формат команды");
                 } finally {
-                    continue;
+                    continue;  // todo finally & continue тут лишние, поэтому идея их подсветила желтым
                 }
             } else {
                 System.out.println("Введите команду");
             }
         }
         scanner.close();
+        // todo закрывать ресурс лучше в том блоке, где он был выделен с использованием finally, на случай сбоя, чтобы не было утечки
     }
 
 
@@ -77,6 +78,10 @@ public class Calculator {
             p.load(in);
             in.close();
         } catch (Exception e) {
+            // todo в подобной ситуации лучше бросить наверх RuntimeException
+            // todo throw new RuntimeException("Нет файла commands.properties",e)
+            // todo тогда на верху будет ясно где грохнулось и какой файл нужен
+            // todo всегда думайте о том, кто будет сопровождать программу в будущем
             System.out.println("Ресурс недоступен");
             System.exit(1);
         }
