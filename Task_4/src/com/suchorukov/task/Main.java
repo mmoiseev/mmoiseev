@@ -17,9 +17,9 @@ public class Main {
             if (Character.isLetterOrDigit(c)) {
                 strBuild.append(c);
 
-                // todo 1) Пустоту буффера проверить через strBuild.length()
+
                 // todo 2) Если файл кончается на букву, будет ли последнее слово учтено в статистике?
-            } else if (!"".equals(strBuild.toString())) {
+            } else if (strBuild.length() > 0) {
                 Integer freq = wordFrequency.get(strBuild.toString());
                 wordFrequency.put(strBuild.toString(), (freq != null ? freq : 0) + 1);
                 strBuild.setLength(0);
