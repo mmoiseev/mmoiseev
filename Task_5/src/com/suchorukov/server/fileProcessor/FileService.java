@@ -12,9 +12,8 @@ public class FileService {
     private FileSystem fileSystem;
 
     public FileService(String defaultPath, String relativePath) {
-        String absolutePath = defaultPath + relativePath;
         this.relativePath = relativePath;
-        setAbsolutePath(absolutePath);
+        setAbsolutePath(defaultPath + relativePath);
     }
 
     public void setAbsolutePath(String absolutePath) {
@@ -24,30 +23,27 @@ public class FileService {
 
     public String getContentByPath() throws IOException {
         String result = "";
-        try {
-            if (fileSystem.checkDir()) {
-                result = getDirectoryContent();
-            }
-        } catch (IllegalArgumentException e) {
+        if (!fileSystem.checkExist()){
+            throw new FileNotFoundException(absolutePath);
+        }
+        if (fileSystem.checkDir()){
+            result = getDirectoryContent();
+        } else {
             result = fileSystem.getFileContent();
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException(e.getMessage());
         }
         return result;
     }
 
     private String getDirectoryContent() {
-        String[] directoryList = fileSystem.getDirectories();
-        String[] fileList = fileSystem.getFiles();
         return HTMLGen.generateHTML(new File(absolutePath), relativePath);
     }
 
-    public String getMimeType() {
+    public String getMimeType() throws FileNotFoundException {
         String result = "text/html";
-        try {
-            fileSystem.checkDir();
-        } catch (FileNotFoundException e){
-        } catch (Exception e) {
+        if (!fileSystem.checkExist()){
+            throw new FileNotFoundException(absolutePath);
+        }
+        if (!fileSystem.checkDir()){
             result = fileSystem.getMimeType();
         }
         return result;

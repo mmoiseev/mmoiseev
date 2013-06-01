@@ -9,13 +9,8 @@ public class ServerMain {
 
         if (args.length > 0) {
             try {
-                port = Integer.parseInt(args[0]);
-            } catch (Exception e) {
-            }
-            try {
-                defaultPath = args[1];
-            } catch (Exception e) {
-            }
+                defaultPath = args[0];
+            } catch (Exception e) {}
         }
 
         RequestHandler server = new RequestHandler(port, defaultPath);

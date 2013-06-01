@@ -1,8 +1,5 @@
 package com.suchorukov.server;
 
-import com.suchorukov.server.SocketProcessor;
-
-import javax.activation.MimetypesFileTypeMap;
 import java.net.*;
 import java.io.*;
 
@@ -21,7 +18,6 @@ public class RequestHandler {
         while (true) {
             Socket clientSocket = s.accept();
             Thread t = new Thread(new SocketProcessor(clientSocket, defaultPath));
-            System.out.println("Starting processor...");
             t.start();
         }
     }

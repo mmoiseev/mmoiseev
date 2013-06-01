@@ -20,34 +20,30 @@ public class FileSystem {
             listFiles = absolutePathFile.listFiles();
     }
 
-    public boolean checkDir() throws FileNotFoundException {
-        if (!absolutePathFile.exists())
-            throw new FileNotFoundException("Ресурс " + absolutePathFile.getName() + " не найден");
-        if (!absolutePathFile.isDirectory())
-            throw new IllegalArgumentException(absolutePathFile.getName() + " не директория");
-        return true;
+    public boolean checkExist() throws FileNotFoundException {
+        return absolutePathFile.exists();
     }
 
-    public String[] getDirectories(){
+    public boolean checkDir(){
+        return absolutePathFile.isDirectory();
+    }
+
+    public String[] getDirectories() {
         String[] listStrDirs = new String[listFiles.length];
         int k = 0;
         for (int i = 0; i < listFiles.length; i++) {
-            if (listFiles[i].isDirectory()){
+            if (listFiles[i].isDirectory()) {
                 listStrDirs[k++] = listFiles[i].getName();
             }
         }
         return listStrDirs;
-
-       /* String[] listStrDir = absolutePathFile.list();
-        String[] listStrFiles = getFiles();
-        Arrays.asList(listStrDir).removeAll(Arrays.asList(listStrFiles));*/
     }
 
-    public String[] getFiles(){
+    public String[] getFiles() {
         String[] listStrFiles = new String[listFiles.length];
         int k = 0;
         for (int i = 0; i < listFiles.length; i++) {
-            if (!listFiles[i].isDirectory()){
+            if (!listFiles[i].isDirectory()) {
                 listStrFiles[k++] = listFiles[i].getName();
             }
         }
@@ -55,35 +51,33 @@ public class FileSystem {
     }
 
     public String getFileContent() throws IOException {
-        if (!absolutePathFile.canRead()){
-            //todo своё исключение
+        if (!absolutePathFile.canRead()) {
             throw new FileNotFoundException();
         }
         StringBuilder result = new StringBuilder();
         InputStream fInput = null;
-        try{
+        try {
             fInput = new FileInputStream(absolutePathFile);
             byte[] buf = new byte[1024];
             int read;
-            while ((read = fInput.read(buf)) >= 0){
+            while ((read = fInput.read(buf)) != -1) {
                 result.append(new String(buf));
             }
         } finally {
-            try{fInput.close();} catch (IOException e) {}
+            try {
+                fInput.close();
+            } catch (IOException e) {
+            }
         }
         return result.toString();
     }
 
 
-
     public String getMimeType() {
-        String result = "";
-
-        result = new MimetypesFileTypeMap().getContentType(absolutePathFile);
-
-        return result;
+        //Работает если положить файл .mime.types в дирректорию юзера
+        //Файл в корне репозитория
+        return new MimetypesFileTypeMap().getContentType(absolutePathFile);
     }
-
 
 
 }

@@ -16,7 +16,7 @@ public final class RequestParser {
             String[] cmd = header.split(" ");
             if (cmd[1].length() > 1) {
                 cmd[1] = URLDecoder.decode(cmd[1], "UTF-8");
-                cmd[1]  = cmd[1].replaceFirst("/$","");
+                cmd[1]  = cmd[1].replaceAll("/$","");
                 r = cmd[1].replace("/", File.separator);
             }
         }

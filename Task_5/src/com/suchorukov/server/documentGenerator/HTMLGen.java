@@ -6,12 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HTMLGen {
-    //todo
-    //отдельно
-    // генерить список файлов
-    // генерить HTML
-    //BUILDER
-
     static MessageFormat trTemplate = new MessageFormat("<tr>" +
             "<td width=\"300px\"><a href=\"{0}\">" +
             "{1}" +
@@ -78,7 +72,7 @@ public class HTMLGen {
         html.append("<table>");
         if (inputFile.getParent() != null){
             Object[] parentStr = new Object[4];
-            parentStr[0] = relativePath + "/..";//relativePath.replace("/\\w*$", "");//
+            parentStr[0] = relativePath + "/..";
             parentStr[1] = "..";
             parentStr[2] = "";
             parentStr[3] = "";
@@ -104,7 +98,7 @@ public class HTMLGen {
             fileArg[0] = relativePath + "/" + file.getName();
             fileArg[1] = file.getName();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-            fileArg[2] = (file.isDirectory() ? "dir" : file.length() / 1024 + "KБ");
+            fileArg[2] = (file.isDirectory() ? "&lt;dir&gt;" : file.length() / 1024 + "KБ");
             fileArg[3] = dateFormat.format(file.lastModified());
             html.append(trTemplate.format(fileArg).toString());
         }
