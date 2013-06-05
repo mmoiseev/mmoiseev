@@ -2,9 +2,7 @@ package com.suchorukov.server.fileProcessor;
 
 import com.suchorukov.server.documentGenerator.HTMLGen;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 public class FileService {
     private String relativePath;
@@ -35,7 +33,14 @@ public class FileService {
     }
 
     private String getDirectoryContent() {
-        return HTMLGen.generateHTML(new File(absolutePath), relativePath);
+        String result = "";
+        try {
+            result = fileSystem.getIndex();
+        } catch (IOException e) {
+            result = HTMLGen.generateHTML( fileSystem.getFile(), relativePath);
+        }
+        return result;
+
     }
 
     public String getMimeType() throws FileNotFoundException {

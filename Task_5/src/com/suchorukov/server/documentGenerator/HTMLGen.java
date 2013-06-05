@@ -63,7 +63,6 @@ public class HTMLGen {
 
     }
 
-
     public static String generateHTML(File inputFile, String relativePath) {
         StringBuilder html = new StringBuilder();
         html.append("<HTML>" + "<HEAD><TITLE>" + inputFile.getPath() + "</TITLE><HEAD><BODY>");

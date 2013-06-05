@@ -2,9 +2,6 @@ package com.suchorukov.server.fileProcessor;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class FileSystem {
     private File absolutePathFile;
@@ -12,6 +9,10 @@ public class FileSystem {
 
     public FileSystem(String absolutePath) {
         setAbsolutePathFile(absolutePath);
+    }
+
+    public File getFile(){
+        return absolutePathFile;
     }
 
     public void setAbsolutePathFile(String absolutePath) {
@@ -24,7 +25,7 @@ public class FileSystem {
         return absolutePathFile.exists();
     }
 
-    public boolean checkDir(){
+    public boolean checkDir() {
         return absolutePathFile.isDirectory();
     }
 
@@ -51,13 +52,17 @@ public class FileSystem {
     }
 
     public String getFileContent() throws IOException {
-        if (!absolutePathFile.canRead()) {
+       return getFileString(absolutePathFile);
+    }
+
+    private String getFileString(File file) throws IOException {
+        if (!file.canRead()) {
             throw new FileNotFoundException();
         }
         StringBuilder result = new StringBuilder();
         InputStream fInput = null;
         try {
-            fInput = new FileInputStream(absolutePathFile);
+            fInput = new FileInputStream(file);
             byte[] buf = new byte[1024];
             int read;
             while ((read = fInput.read(buf)) != -1) {
@@ -70,6 +75,10 @@ public class FileSystem {
             }
         }
         return result.toString();
+    }
+
+    public String getIndex() throws IOException {
+        return getFileString(new File(absolutePathFile.getPath() + File.separator + "index.html"));
     }
 
 
